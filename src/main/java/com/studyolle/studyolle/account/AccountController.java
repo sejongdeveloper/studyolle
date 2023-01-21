@@ -39,6 +39,14 @@ public class AccountController {
             return "account/sign-up";
         }
 
+        Account newAccount = saveNewAccount(signUpForm);
+        newAccount.generateEmailCheckToken();
+        sendSignUpConfirmEamil(newAccount);
+
+        return "redirect:/";
+    }
+
+    private Account saveNewAccount(SignUpForm signUpForm) {
         Account account = Account.builder()
                 .email(signUpForm.getEmail())
                 .nickname(signUpForm.getNickname())
@@ -47,15 +55,15 @@ public class AccountController {
                 .studyUpdatedByWeb(true)
                 .studyEnrollmentResultByWeb(true)
                 .build();
-        Account newAccount = accountRepository.save(account);
+        return accountRepository.save(account);
+    }
 
-        newAccount.generateEmailCheckToken();
+    private void sendSignUpConfirmEamil(Account newAccount) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(newAccount.getEmail());
         mailMessage.setSubject("스터디올래, 회원 가입 인증");
         mailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken() +
                 "&email=" + newAccount.getEmail());
         javaMailSender.send(mailMessage);
-        return "redirect:/";
     }
 }
