@@ -1,11 +1,8 @@
 package com.studyolle.studyolle.settings;
 
-import com.studyolle.studyolle.domain.Account;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 public class Notifications {
 
     private boolean studyCreatedByEmail;
@@ -20,12 +17,4 @@ public class Notifications {
 
     private boolean studyUpdatedByWeb;
 
-    public Notifications(Account account) {
-        this.studyCreatedByEmail = account.isStudyCreatedByEmail();
-        this.studyCreatedByWeb = account.isStudyCreatedByWeb();
-        this.studyEnrollmentResultByEmail = account.isStudyEnrollmentResultByEmail();
-        this.studyEnrollmentResultByWeb = account.isStudyEnrollmentResultByWeb();
-        this.studyUpdatedByEmail = account.isStudyUpdatedByEmail();
-        this.studyUpdatedByWeb = account.isStudyUpdatedByWeb();
-    }
 }
