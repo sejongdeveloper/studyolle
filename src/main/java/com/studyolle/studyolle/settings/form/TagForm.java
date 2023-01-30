@@ -1,9 +1,8 @@
 package com.studyolle.studyolle.settings.form;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter @Setter
+@Data
 public class TagForm {
     private String tagTitle;
 }
