@@ -1,6 +1,6 @@
 package com.studyolle.studyolle.study;
 
-import com.studyolle.studyolle.account.CurrentUser;
+import com.studyolle.studyolle.account.CurrentAccount;
 import com.studyolle.studyolle.domain.Account;
 import com.studyolle.studyolle.domain.Study;
 import com.studyolle.studyolle.study.form.StudyForm;
@@ -35,21 +35,23 @@ public class StudyController {
     }
 
     @GetMapping("/study/{path}")
-    public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
+    public String viewStudy(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudy(path);
+
         model.addAttribute(account);
-        model.addAttribute(studyRepository.findByPath(path));
+        model.addAttribute(study);
         return "study/view";
     }
 
     @GetMapping("/new-study")
-    public String newStudyForm(@CurrentUser Account account, Model model) {
+    public String newStudyForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(new StudyForm());
         return "study/form";
     }
 
     @PostMapping("/new-study")
-    public String newStudySubmit(@CurrentUser Account account, @Valid StudyForm studyForm, Errors errors, Model model) {
+    public String newStudySubmit(@CurrentAccount Account account, @Valid StudyForm studyForm, Errors errors, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return "study/form";
@@ -60,9 +62,10 @@ public class StudyController {
     }
 
     @GetMapping("/study/{path}/members")
-    public String viewStudyMembers(@CurrentUser Account account, @PathVariable String path, Model model) {
+    public String viewStudyMembers(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudy(path);
         model.addAttribute(account);
-        model.addAttribute(studyRepository.findByPath(path));
+        model.addAttribute(study);
         return "study/members";
     }
 }
