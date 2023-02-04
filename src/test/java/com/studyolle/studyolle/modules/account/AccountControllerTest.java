@@ -1,19 +1,16 @@
 package com.studyolle.studyolle.modules.account;
 
+import com.studyolle.studyolle.infra.MockMvcTest;
 import com.studyolle.studyolle.infra.mail.EmailMessage;
 import com.studyolle.studyolle.infra.mail.EmailService;
-import com.studyolle.studyolle.modules.account.Account;
-import com.studyolle.studyolle.modules.account.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -24,16 +21,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
+@MockMvcTest
 class AccountControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private AccountRepository accountRepository;
+    @Autowired MockMvc mockMvc;
+    @Autowired AccountRepository accountRepository;
 
     @MockBean
     EmailService emailService;
@@ -42,13 +34,12 @@ class AccountControllerTest {
     @Test
     void checkEmailToken_with_wrong_input() throws Exception {
         mockMvc.perform(get("/check-email-token")
-                        .param("token", "aaaaaa")
+                        .param("token", "sdfjslwfwef")
                         .param("email", "email@email.com"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("error"))
                 .andExpect(view().name("account/checked-email"))
-                .andExpect(unauthenticated())
-        ;
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("인증 메일 확인 - 입력값 정상")
@@ -70,8 +61,7 @@ class AccountControllerTest {
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("numberOfUser"))
                 .andExpect(view().name("account/checked-email"))
-                .andExpect(authenticated().withUsername("keesun"))
-        ;
+                .andExpect(authenticated().withUsername("keesun"));
     }
 
     @DisplayName("회원 가입 화면 보이는지 테스트")
@@ -82,8 +72,7 @@ class AccountControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("account/sign-up"))
                 .andExpect(model().attributeExists("signUpForm"))
-                .andExpect(unauthenticated())
-        ;
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원 가입 처리 - 입력값 오류")
@@ -96,8 +85,7 @@ class AccountControllerTest {
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("account/sign-up"))
-                .andExpect(unauthenticated())
-        ;
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원 가입 처리 - 입력값 정상")
@@ -110,14 +98,12 @@ class AccountControllerTest {
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"))
-                .andExpect(authenticated().withUsername("keesun"))
-        ;
+                .andExpect(authenticated().withUsername("keesun"));
 
         Account account = accountRepository.findByEmail("keesun@email.com");
         assertNotNull(account);
         assertNotEquals(account.getPassword(), "12345678");
         assertNotNull(account.getEmailCheckToken());
-        assertTrue(accountRepository.existsByEmail("keesun@email.com"));
         then(emailService).should().sendEmail(any(EmailMessage.class));
     }
 }

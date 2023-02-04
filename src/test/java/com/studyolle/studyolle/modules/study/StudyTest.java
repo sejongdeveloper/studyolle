@@ -2,7 +2,6 @@ package com.studyolle.studyolle.modules.study;
 
 import com.studyolle.studyolle.modules.account.Account;
 import com.studyolle.studyolle.modules.account.UserAccount;
-import com.studyolle.studyolle.modules.study.Study;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
