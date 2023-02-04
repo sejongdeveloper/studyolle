@@ -154,4 +154,5 @@ class EventControllerTest extends StudyControllerTest {
         event.setEndDateTime(LocalDateTime.now().plusDays(1).plusHours(7));
         return eventService.createEvent(event, study, account);
     }
+
 }
