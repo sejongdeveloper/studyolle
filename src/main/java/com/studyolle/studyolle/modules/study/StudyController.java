@@ -1,7 +1,7 @@
 package com.studyolle.studyolle.modules.study;
 
-import com.studyolle.studyolle.modules.account.CurrentAccount;
 import com.studyolle.studyolle.modules.account.Account;
+import com.studyolle.studyolle.modules.account.CurrentAccount;
 import com.studyolle.studyolle.modules.study.form.StudyForm;
 import com.studyolle.studyolle.modules.study.validator.StudyFormValidator;
 import lombok.RequiredArgsConstructor;
@@ -82,9 +82,4 @@ public class StudyController {
         return "redirect:/study/" + study.getEncodedPath() + "/members";
     }
 
-    @GetMapping("/study/data")
-    public String generateTestData(@CurrentAccount Account account) {
-        studyService.generateTestStudies(account);
-        return "redirect:/";
-    }
 }
