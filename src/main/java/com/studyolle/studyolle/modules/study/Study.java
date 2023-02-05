@@ -2,8 +2,8 @@ package com.studyolle.studyolle.modules.study;
 
 import com.studyolle.studyolle.modules.account.Account;
 import com.studyolle.studyolle.modules.account.UserAccount;
-import com.studyolle.studyolle.modules.zone.Zone;
 import com.studyolle.studyolle.modules.tag.Tag;
+import com.studyolle.studyolle.modules.zone.Zone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -19,32 +19,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@NamedEntityGraph(name = "Study.withAll", attributeNodes = {
-        @NamedAttributeNode("tags"),
-        @NamedAttributeNode("zones"),
-        @NamedAttributeNode("managers"),
-        @NamedAttributeNode("members")})
-@NamedEntityGraph(name = "Study.withTagsAndManagers", attributeNodes = {
-        @NamedAttributeNode("tags"),
-        @NamedAttributeNode("managers")})
-@NamedEntityGraph(name = "Study.withZonesAndManagers", attributeNodes = {
-        @NamedAttributeNode("zones"),
-        @NamedAttributeNode("managers")})
-@NamedEntityGraph(name = "Study.withManagers", attributeNodes = {
-        @NamedAttributeNode("managers")})
-@NamedEntityGraph(name = "Study.withMembers", attributeNodes = {
-        @NamedAttributeNode("members")})
-@NamedEntityGraph(name = "Study.withTagsAndZones", attributeNodes = {
-        @NamedAttributeNode("tags"),
-        @NamedAttributeNode("zones")})
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
 @Builder @AllArgsConstructor @NoArgsConstructor
